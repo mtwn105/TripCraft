@@ -1,36 +1,108 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TripCraft AI Frontend
 
-## Getting Started
+This is the frontend application for TripCraft AI, built with Next.js 15, React 19, and TypeScript.
 
-First, run the development server:
+## 🛠️ Technology Stack
+
+- **Next.js 15**: React framework with App Router
+- **React 19**: UI library
+- **TypeScript**: Type-safe JavaScript
+- **Tailwind CSS**: Utility-first CSS framework
+- **Radix UI**: Accessible component primitives
+- **Shadcn UI**: Component library built on Radix
+- **Prisma**: Type-safe database client
+- **NextAuth.js**: Authentication for Next.js
+
+## 📋 Architecture
+
+The frontend follows Next.js 15 App Router conventions:
+
+- **app/**: Application routes and pages
+  - **api/**: API routes
+  - **auth/**: Authentication pages
+  - **plan/**: Trip planning pages
+  - **plans/**: Trip plans listing and details
+- **components/**: Reusable UI components
+  - **ui/**: Shadcn UI components
+- **lib/**: Utility functions and shared code
+- **prisma/**: Database schema and migrations
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 20+
+- pnpm 9+
+- PostgreSQL 15+ (for Prisma)
+
+### Setup
+
+1. Install dependencies:
+   ```bash
+   pnpm install
+   ```
+
+2. Create a `.env.local` file in the root directory with the following variables:
+   ```
+   # API URL
+   NEXT_PUBLIC_API_URL=http://localhost:8000
+
+   # Database
+   DATABASE_URL=postgresql://username:password@localhost:5432/tripcraft
+
+   # Authentication
+   NEXTAUTH_SECRET=your_nextauth_secret
+   NEXTAUTH_URL=http://localhost:3000
+
+   # OAuth Providers (optional)
+   GOOGLE_CLIENT_ID=your_google_client_id
+   GOOGLE_CLIENT_SECRET=your_google_client_secret
+   ```
+
+3. Run Prisma migrations:
+   ```bash
+   pnpm prisma migrate dev
+   ```
+
+4. Start the development server:
+   ```bash
+   pnpm dev
+   ```
+
+The application will be available at http://localhost:3000.
+
+### Building for Production
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm build
+pnpm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🧪 Testing
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Run tests with:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm test
+```
 
-## Learn More
+## 🎨 UI Components
 
-To learn more about Next.js, take a look at the following resources:
+The project uses Shadcn UI components. To add a new component:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm dlx shadcn-ui@latest add [component-name]
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Available components can be found in the `components/ui/` directory.
 
-## Deploy on Vercel
+## 🤝 Contributing
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Fork the repository
+2. Create your feature branch
+3. Implement your changes
+4. Add tests for your changes
+5. Ensure all tests pass
+6. Submit a pull request
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Please follow the project's code style and include appropriate comments.
