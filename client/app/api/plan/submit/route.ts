@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { auth } from '@/lib/auth';
 
 interface TripFormData {
   name: string;
@@ -28,6 +29,18 @@ interface TripFormData {
 
 export async function POST(request: NextRequest) {
   try {
+    const session = await auth.api.getSession({ headers: request.headers });
+    
+    if (!session) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Authentication required'
+        },
+        { status: 401 }
+      );
+    }
+
     const tripData: TripFormData = await request.json();
 
     // Log the trip data for debugging
@@ -70,8 +83,7 @@ export async function POST(request: NextRequest) {
         beenThereBefore: tripData.beenThereBefore || null,
         lovedPlaces: tripData.lovedPlaces || null,
         additionalInfo: tripData.additionalInfo || null,
-        // userId can be added later when auth is implemented
-        userId: null
+        userId: session.user.id
       }
     });
 

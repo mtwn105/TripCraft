@@ -31,7 +31,7 @@ Make travel planning effortless and personal. No stress, no endless research—j
 
 **Frontend:** Next.js 15, React 19, TypeScript, Tailwind CSS, Radix UI
 **Backend:** Python 3.12, FastAPI, PostgreSQL, SQLAlchemy
-**AI:** Agno (agent coordination), Gemini (LLM), Exa (search), Firecrawl (web scraping)
+**AI:** OpenRouter/OpenAI (LLM), Exa (search), Firecrawl (web scraping)
 **APIs:** Google Flights, Kayak
 
 ---
@@ -55,8 +55,8 @@ You'll need to set up the following environment variables:
 DATABASE_URL=postgresql://username:password@localhost:5432/tripcraft
 
 # AI API Keys
-AGNO_API_KEY=your_agno_api_key_here
-GEMINI_API_KEY=your_gemini_api_key_here
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+OPENAI_API_KEY=your_openai_api_key_here
 EXA_API_KEY=your_exa_api_key_here
 FIRECRAWL_API_KEY=your_firecrawl_api_key_here
 

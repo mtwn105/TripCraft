@@ -1,15 +1,31 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { auth } from '@/lib/auth';
 
 export async function GET(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    const session = await auth.api.getSession({ headers: request.headers });
+    
+    if (!session) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Authentication required'
+        },
+        { status: 401 }
+      );
+    }
+
     const { id } = await params;
 
     const tripPlan = await prisma.tripPlan.findUnique({
-      where: { id },
+      where: { 
+        id,
+        userId: session.user.id
+      },
       include: {
         status: true,
         output: true,
@@ -46,15 +62,30 @@ export async function GET(
 }
 
 export async function DELETE(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    const session = await auth.api.getSession({ headers: request.headers });
+    
+    if (!session) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Authentication required'
+        },
+        { status: 401 }
+      );
+    }
+
     const { id } = params;
 
-    // First check if the plan exists
+    // First check if the plan exists and belongs to the user
     const tripPlan = await prisma.tripPlan.findUnique({
-      where: { id },
+      where: { 
+        id,
+        userId: session.user.id
+      },
     });
 
     if (!tripPlan) {
@@ -78,7 +109,10 @@ export async function DELETE(
 
     // Delete the trip plan
     await prisma.tripPlan.delete({
-      where: { id },
+      where: { 
+        id,
+        userId: session.user.id
+      },
     });
 
     return NextResponse.json(

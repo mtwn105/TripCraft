@@ -279,6 +279,11 @@ export default function Plan() {
   }
 
   const onSubmit = async (data: TripFormData) => {
+    if (isSubmitting) {
+      console.log('Submission already in progress, ignoring duplicate');
+      return;
+    }
+    
     setIsSubmitting(true);
     setSubmitMessage(null);
 

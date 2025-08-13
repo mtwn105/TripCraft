@@ -31,15 +31,17 @@ export default function Header() {
               <h1 className="text-2xl font-bold text-accent">TripCraft AI</h1>
             </Link>
 
-            <nav className="flex items-center gap-6">
-              <Link
-                href="/plans"
-                className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <Luggage className="w-4 h-4" />
-                My Plans
-              </Link>
-            </nav>
+            {session?.user && (
+              <nav className="flex items-center gap-6">
+                <Link
+                  href="/plans"
+                  className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <Luggage className="w-4 h-4" />
+                  My Plans
+                </Link>
+              </nav>
+            )}
           </div>
 
           <div className="flex items-center gap-4">

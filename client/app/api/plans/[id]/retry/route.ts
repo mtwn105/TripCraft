@@ -1,16 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { auth } from '@/lib/auth';
 
 export async function POST(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    const session = await auth.api.getSession({ headers: request.headers });
+    
+    if (!session) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Authentication required'
+        },
+        { status: 401 }
+      );
+    }
+
     const { id } = params;
 
-    // First check if the plan exists
+    // First check if the plan exists and belongs to the user
     const tripPlan = await prisma.tripPlan.findUnique({
-      where: { id },
+      where: { 
+        id,
+        userId: session.user.id
+      },
       include: {
         status: true,
         output: true,

@@ -1156,7 +1156,7 @@ export default function TripDetailsPage() {
                         <Plane className="mr-3 h-6 w-6 text-primary" /> Selected
                         Flights
                       </h2>
-                      <div className="space-y-6">
+                      <div className="space-y-4">
                         {trip.itinerary.flights
                           .filter(
                             (flight) =>
@@ -1166,84 +1166,81 @@ export default function TripDetailsPage() {
                           .map((flight, index) => (
                             <Card
                               key={index}
-                              className="border-r-4 border-r-primary overflow-hidden"
+                              className="group hover:shadow-lg transition-all duration-300 border border-border/50 hover:border-primary/30 bg-gradient-to-r from-background to-muted/20"
                             >
-                              <CardHeader className="bg-muted/30">
-                                <CardTitle className="text-xl flex items-center">
-                                  <Plane className="h-5 w-5 mr-2 text-primary" />
-                                  {flight.airline}
-                                </CardTitle>
-                                {flight.flight_number &&
-                                  flight.flight_number !== "N/A" &&
-                                  flight.flight_number !== "TBD" && (
-                                    <CardDescription>
-                                      Flight {flight.flight_number}
-                                    </CardDescription>
-                                  )}
-                              </CardHeader>
-                              <CardContent className="py-6">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                                  <div className="bg-muted/20 p-3 rounded-lg">
-                                    <p className="font-medium flex items-center">
-                                      <Clock className="h-4 w-4 mr-2 text-primary" />
-                                      Duration:
-                                    </p>
-                                    <p className="text-muted-foreground mt-1">
-                                      {flight.duration}
-                                    </p>
+                              <CardContent className="p-6">
+                                <div className="flex items-center justify-between mb-6">
+                                  <div className="flex items-center space-x-3">
+                                    <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
+                                      <Plane className="h-5 w-5 text-primary" />
+                                    </div>
+                                    <div>
+                                      <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+                                        {flight.airline}
+                                      </h3>
+                                      {flight.flight_number &&
+                                        flight.flight_number !== "N/A" &&
+                                        flight.flight_number !== "TBD" && (
+                                          <p className="text-sm text-muted-foreground">
+                                            Flight {flight.flight_number}
+                                          </p>
+                                        )}
+                                    </div>
                                   </div>
-                                  <div className="bg-muted/20 p-3 rounded-lg">
-                                    <p className="font-medium flex items-center">
-                                      <DollarSign className="h-4 w-4 mr-2 text-primary" />
-                                      Price:
-                                    </p>
-                                    <p className="text-muted-foreground mt-1">
+                                  <div className="text-right">
+                                    <div className="text-2xl font-bold text-primary">
                                       {flight.price}
-                                    </p>
+                                    </div>
+                                    <div className="text-sm text-muted-foreground">
+                                      per person
+                                    </div>
                                   </div>
-                                  <div className="bg-muted/20 p-3 rounded-lg">
-                                    <p className="font-medium flex items-center">
-                                      <Clock className="h-4 w-4 mr-2 text-green-500" />
-                                      Departure:
-                                    </p>
-                                    <p className="text-muted-foreground mt-1">
+                                </div>
+                                
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                                  <div className="text-center p-3 bg-muted/30 rounded-lg border border-border/30">
+                                    <Clock className="h-4 w-4 mx-auto mb-2 text-muted-foreground" />
+                                    <div className="text-xs text-muted-foreground mb-1">Duration</div>
+                                    <div className="font-medium text-sm">{flight.duration}</div>
+                                  </div>
+                                  <div className="text-center p-3 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200/30 dark:border-green-800/30">
+                                    <div className="text-xs text-green-600 dark:text-green-400 mb-1">Departure</div>
+                                    <div className="font-medium text-sm text-green-700 dark:text-green-300">
                                       {flight.departure_time || "Not specified"}
-                                    </p>
+                                    </div>
                                   </div>
-                                  <div className="bg-muted/20 p-3 rounded-lg">
-                                    <p className="font-medium flex items-center">
-                                      <Clock className="h-4 w-4 mr-2 text-red-500" />
-                                      Arrival:
-                                    </p>
-                                    <p className="text-muted-foreground mt-1">
+                                  <div className="text-center p-3 bg-red-50 dark:bg-red-950/20 rounded-lg border border-red-200/30 dark:border-red-800/30">
+                                    <div className="text-xs text-red-600 dark:text-red-400 mb-1">Arrival</div>
+                                    <div className="font-medium text-sm text-red-700 dark:text-red-300">
                                       {flight.arrival_time || "Not specified"}
-                                    </p>
+                                    </div>
                                   </div>
                                   {typeof flight.stops !== "undefined" && (
-                                    <div className="bg-muted/20 p-3 rounded-lg">
-                                      <p className="font-medium">Stops:</p>
-                                      <p className="text-muted-foreground mt-1">
+                                    <div className="text-center p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200/30 dark:border-blue-800/30">
+                                      <div className="text-xs text-blue-600 dark:text-blue-400 mb-1">Stops</div>
+                                      <div className="font-medium text-sm text-blue-700 dark:text-blue-300">
                                         {flight.stops}
-                                      </p>
+                                      </div>
                                     </div>
                                   )}
                                 </div>
+                                
+                                {flight.url &&
+                                  flight.url !== "N/A" &&
+                                  flight.url !== "TBD" && (
+                                    <div className="flex justify-end">
+                                      <a
+                                        href={flight.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
+                                      >
+                                        Book Flight
+                                        <Globe className="h-4 w-4 ml-2" />
+                                      </a>
+                                    </div>
+                                  )}
                               </CardContent>
-                              {flight.url &&
-                                flight.url !== "N/A" &&
-                                flight.url !== "TBD" && (
-                                  <CardFooter className="bg-muted/30 border-t">
-                                    <a
-                                      href={flight.url}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="text-primary hover:underline text-sm flex items-center"
-                                    >
-                                      Book / View Flight{" "}
-                                      <Globe className="h-4 w-4 ml-1.5" />
-                                    </a>
-                                  </CardFooter>
-                                )}
                             </Card>
                           ))}
                       </div>
