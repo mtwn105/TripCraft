@@ -30,8 +30,11 @@ Make travel planning effortless and personal. No stress, no endless research—j
 ## 🛠️ Tech Stack
 
 **Frontend:** Next.js 15, React 19, TypeScript, Tailwind CSS, Radix UI
+
 **Backend:** Python 3.12, FastAPI, PostgreSQL, SQLAlchemy
+
 **AI:** OpenRouter/OpenAI (LLM), Exa (search), Firecrawl (web scraping)
+
 **APIs:** Google Flights, Kayak
 
 ---
