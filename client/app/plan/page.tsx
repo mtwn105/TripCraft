@@ -147,20 +147,20 @@ const NumberInput = ({
         type="button"
         variant="ghost"
         size="sm"
-        className="h-12 px-3 rounded-r-none border-r"
+        className="h-10 w-10 p-0 rounded-r-none border-r sm:h-12 sm:w-12"
         onClick={decrement}
         disabled={value <= min}
       >
         <Minus className="w-4 h-4" />
       </Button>
-      <div className="flex-1 h-12 flex items-center justify-center bg-background text-center font-medium text-base min-w-[60px]">
+      <div className="flex-1 h-10 sm:h-12 flex items-center justify-center bg-background text-center font-medium text-base min-w-[40px] sm:min-w-[60px]">
         {value}
       </div>
       <Button
         type="button"
         variant="ghost"
         size="sm"
-        className="h-12 px-3 rounded-l-none border-l"
+        className="h-10 w-10 p-0 rounded-l-none border-l sm:h-12 sm:w-12"
         onClick={increment}
         disabled={value >= max}
       >
@@ -493,11 +493,11 @@ export default function Plan() {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-4 flex items-center justify-center gap-3">
-            <Luggage className="w-8 h-8 text-primary" />
+          <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-4 flex items-center justify-center gap-2 sm:gap-3">
+            <Luggage className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
             Plan Your Perfect Trip
           </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
             Tell us about your dream destination and we&apos;ll craft the
             perfect itinerary just for you
           </p>
@@ -505,26 +505,18 @@ export default function Plan() {
 
         {/* Progress Indicator */}
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-4 px-2 sm:px-0">
             {steps.map((step, index) => {
               const StepIcon = step.icon;
               return (
-                <div key={step.id} className="flex flex-col items-center">
+                <div key={step.id} className="flex flex-col items-center flex-1 min-w-0">
                   <div
-                    className={`w-12 h-12 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${
-                      index <= currentStep
-                        ? "bg-primary border-primary text-primary-foreground"
-                        : "bg-background border-border text-muted-foreground"
-                    }`}
+                    className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${index <= currentStep ? "bg-primary border-primary text-primary-foreground" : "bg-background border-border text-muted-foreground"}`}
                   >
-                    <StepIcon className="w-5 h-5" />
+                    <StepIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
                   <span
-                    className={`text-xs mt-2 font-medium ${
-                      index <= currentStep
-                        ? "text-primary"
-                        : "text-muted-foreground"
-                    }`}
+                    className={`text-[0.6rem] sm:text-xs mt-1 sm:mt-2 font-medium text-center ${index <= currentStep ? "text-primary" : "text-muted-foreground"}`}
                   >
                     {step.title}
                   </span>
@@ -834,7 +826,7 @@ export default function Plan() {
                                     className="h-12 text-base"
                                   />
                                 </FormControl>
-                                <FormDescription className="text-xs text-muted-foreground">
+                                <FormDescription className="text-xs sm:text-sm text-muted-foreground">
                                   <Sparkles className="w-3 h-3 inline mr-1" />
                                   You can enter flexible dates like &quot;August
                                   2025&quot;, &quot;Summer 2025
@@ -1090,7 +1082,7 @@ export default function Plan() {
                                     }
                                     className="w-full"
                                   />
-                                  <div className="flex justify-between text-sm text-muted-foreground mt-2">
+                                  <div className="flex justify-between text-xs sm:text-sm text-muted-foreground mt-2">
                                     {form.watch("budgetCurrency") === "USD" && (
                                       <>
                                         <span>$100</span>
@@ -1401,7 +1393,7 @@ export default function Plan() {
                                 onValueChange={field.onChange}
                                 className="w-full"
                               />
-                              <div className="flex justify-between text-sm text-muted-foreground mt-2">
+                              <div className="flex justify-between text-xs sm:text-sm text-muted-foreground mt-2">
                                 <span>Very relaxed</span>
                                 <span>Balanced</span>
                                 <span>Action-packed</span>
@@ -1524,7 +1516,7 @@ export default function Plan() {
                 variant="outline"
                 onClick={prevStep}
                 disabled={currentStep === 0 || isSubmitting}
-                className="h-12 px-6"
+                className="h-10 px-4 sm:h-12 sm:px-6"
               >
                 <ChevronLeft className="w-4 h-4 mr-2" />
                 Previous
@@ -1538,7 +1530,7 @@ export default function Plan() {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="h-12 px-8"
+                  className="h-10 px-6 sm:h-12 sm:px-8"
                 >
                   {isSubmitting ? (
                     <>
@@ -1560,7 +1552,7 @@ export default function Plan() {
                     nextStep(e);
                   }}
                   disabled={isSubmitting}
-                  className="h-12 px-6"
+                  className="h-10 px-4 sm:h-12 sm:px-6"
                 >
                   Next
                   <ChevronRight className="w-4 h-4 ml-2" />
