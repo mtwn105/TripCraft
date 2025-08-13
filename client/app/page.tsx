@@ -7,7 +7,7 @@ import {
   Calendar,
   Sparkles,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { TrackButton } from "@/components/track-button";
 import {
   Card,
   CardContent,
@@ -36,18 +36,23 @@ export default function Home() {
             conversation about your perfect trip.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-x-6">
-            <Link href="/plan">
-              <Button
-                size="lg"
-                className="bg-primary hover:bg-primary/90 w-full sm:w-auto"
-              >
-                <Plane className="w-4 h-4 mr-2" />
-                Plan My Trip
-              </Button>
-            </Link>
-            <Button variant="ghost" size="lg" className="w-full sm:w-auto">
+            <TrackButton
+              href="/plan"
+              eventName="Plan My Trip Hero"
+              size="lg"
+              className="bg-primary hover:bg-primary/90 w-full sm:w-auto"
+            >
+              <Plane className="w-4 h-4 mr-2" />
+              Plan My Trip
+            </TrackButton>
+            <TrackButton
+              eventName="See How It Works"
+              variant="ghost"
+              size="lg"
+              className="w-full sm:w-auto"
+            >
               See How It Works <span aria-hidden="true">→</span>
-            </Button>
+            </TrackButton>
           </div>
         </div>
 
@@ -212,12 +217,15 @@ export default function Home() {
             Stop spending hours planning and start experiencing. Let our AI
             create your perfect journey.
           </p>
-          <Link href="/plan">
-            <Button size="lg" className="bg-primary hover:bg-primary/90">
-              <Plane className="w-4 h-4 mr-2" />
-              Start Planning Now
-            </Button>
-          </Link>
+          <TrackButton
+            href="/plan"
+            eventName="Start Planning Now CTA"
+            size="lg"
+            className="bg-primary hover:bg-primary/90"
+          >
+            <Plane className="w-4 h-4 mr-2" />
+            Start Planning Now
+          </TrackButton>
         </div>
       </main>
     </div>

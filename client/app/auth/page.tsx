@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
+import { umami } from "@/lib/umami";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -40,9 +41,11 @@ export default function AuthPage() {
 
       if (result.error) {
         toast.error(result.error.message || "Failed to sign in");
+        umami.track("Sign In Failure", { error: result.error.message });
         return;
       }
 
+      umami.track("Sign In Success");
       toast.success("Welcome back! Redirecting to your dashboard...");
       router.push("/plan");
     } catch (error) {
@@ -66,9 +69,11 @@ export default function AuthPage() {
 
       if (result.error) {
         toast.error(result.error.message || "Failed to create account");
+        umami.track("Sign Up Failure", { error: result.error.message });
         return;
       }
 
+      umami.track("Sign Up Success");
       toast.success("Account created successfully! Redirecting...");
       router.push("/plan");
     } catch (error) {

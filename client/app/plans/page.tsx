@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { umami } from "@/lib/umami";
 import {
   Card,
   CardContent,
@@ -105,6 +106,7 @@ export default function Plans() {
     try {
       setLoading(true);
       setError(null);
+      umami.track("Refresh Plans");
       const response = await fetch("/api/plans");
       const data = await response.json();
 
@@ -133,6 +135,7 @@ export default function Plans() {
         // Remove the plan from the local state
         setTripPlans(tripPlans.filter((plan) => plan.id !== planId));
         toast.success("Trip plan deleted successfully");
+        umami.track("Delete Plan", { planId });
       } else {
         toast.error(data.message || "Failed to delete trip plan");
       }
@@ -213,7 +216,7 @@ export default function Plans() {
               <RefreshCw className="w-4 h-4 mr-2" />
               Refresh
             </Button>
-            <Link href="/plan">
+            <Link href="/plan" onClick={() => umami.track("Create New Trip")}>
               <Button>
                 <Plus className="w-4 h-4 mr-2" />
                 New Trip Plan
@@ -230,7 +233,7 @@ export default function Plans() {
             <p className="text-muted-foreground mb-6">
               Start planning your next adventure!
             </p>
-            <Link href="/plan">
+            <Link href="/plan" onClick={() => umami.track("Create New Trip")}>
               <Button>
                 <Plus className="w-4 h-4 mr-2" />
                 Create Your First Trip Plan
@@ -357,7 +360,7 @@ export default function Plans() {
 
                   {/* Actions */}
                   <div className="flex gap-2 pt-2">
-                    <Link href={`/plan/${plan.id}`} className="flex-1">
+                    <Link href={`/plan/${plan.id}`} className="flex-1" onClick={() => umami.track("View Plan Details", { planId: plan.id })}>
                       <Button variant="outline" size="sm" className="w-full">
                         <Eye className="w-4 h-4 mr-2" />
                         View Details

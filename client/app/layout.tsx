@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
@@ -27,6 +28,11 @@ export default function RootLayout({
         {children}
         <Footer />
         <Toaster />
+        <Script
+          defer
+          src="https://mtwnanalytics.xyz/script.js"
+          data-website-id="877ed4a3-5eb1-4243-b5b9-96b0a41b8056"
+        />
       </body>
     </html>
   );

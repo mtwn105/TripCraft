@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { authClient } from "@/lib/auth-client";
+import { umami } from "@/lib/umami";
 import {
   Card,
   CardContent,
@@ -283,7 +284,7 @@ export default function Plan() {
       console.log('Submission already in progress, ignoring duplicate');
       return;
     }
-    
+
     setIsSubmitting(true);
     setSubmitMessage(null);
 
@@ -313,6 +314,7 @@ export default function Plan() {
       const result = await response.json();
 
       if (result.success) {
+        umami.track("Plan Submission Success", { tripPlanId: result.tripPlanId });
         setSubmitMessage("🎉 Your trip plan has been submitted successfully!");
         console.log("Trip submitted with ID:", result.tripPlanId);
 
@@ -321,6 +323,7 @@ export default function Plan() {
           router.push(`/plan/${result.tripPlanId}`);
         }, 1500);
       } else {
+        umami.track("Plan Submission Failure", { error: result.error });
         setSubmitMessage("❌ Failed to submit trip plan. Please try again.");
       }
     } catch (error) {

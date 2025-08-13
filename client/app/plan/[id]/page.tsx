@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { umami } from "@/lib/umami";
 import { Badge } from "@/components/ui/badge";
 import {
   Accordion,
@@ -437,6 +438,7 @@ export default function TripDetailsPage() {
 
     try {
       setRetryLoading(true);
+      umami.track("Retry Plan Generation", { tripId });
       const response = await fetch(`/api/plans/${tripId}/retry`, {
         method: "POST",
       });
@@ -1219,6 +1221,7 @@ export default function TripDetailsPage() {
                             href={hotel.url}
                             target="_blank"
                             rel="noopener noreferrer"
+                            onClick={() => umami.track("View Hotel", { hotel: hotel.hotel_name })}
                             className="text-primary hover:underline text-sm flex items-center"
                           >
                             View Hotel / Book{" "}
@@ -1339,6 +1342,7 @@ export default function TripDetailsPage() {
                                         href={flight.url}
                                         target="_blank"
                                         rel="noopener noreferrer"
+                                        onClick={() => umami.track("View Flight", { flight: flight.flight_number })}
                                         className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
                                       >
                                         Book Flight
@@ -1439,6 +1443,7 @@ export default function TripDetailsPage() {
                                   href={restaurant.url}
                                   target="_blank"
                                   rel="noopener noreferrer"
+                                  onClick={() => umami.track("View Restaurant", { restaurant: restaurant.name })}
                                   className="text-primary hover:underline text-sm flex items-center"
                                 >
                                   Visit Website{" "}
