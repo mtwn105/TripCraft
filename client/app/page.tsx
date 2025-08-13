@@ -212,10 +212,12 @@ export default function Home() {
             Stop spending hours planning and start experiencing. Let our AI
             create your perfect journey.
           </p>
-          <Button size="lg" className="bg-primary hover:bg-primary/90">
-            <Plane className="w-4 h-4 mr-2" />
-            Start Planning Now
-          </Button>
+          <Link href="/plan">
+            <Button size="lg" className="bg-primary hover:bg-primary/90">
+              <Plane className="w-4 h-4 mr-2" />
+              Start Planning Now
+            </Button>
+          </Link>
         </div>
       </main>
     </div>

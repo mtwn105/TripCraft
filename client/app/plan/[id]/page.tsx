@@ -3,6 +3,12 @@
 import { useEffect, useState, useCallback } from "react";
 import { Badge } from "@/components/ui/badge";
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
   Card,
   CardContent,
   CardDescription,
@@ -38,6 +44,8 @@ import { useParams } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
+import { useSwipeable } from "react-swipeable";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Type Definitions
 interface DayPlan {
@@ -207,6 +215,50 @@ function StatusBadge({ status }: { status: TripDetails["status"] }) {
   );
 }
 
+function TripInfo({ trip }: { trip: TripDetails }) {
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
+      <div className="flex items-center gap-2">
+        <CalendarDays className="h-4 w-4 text-primary" />
+        <div>
+          <p className="font-semibold">
+            {formatDate(trip.travelDatesStart, trip.dateInputType)}
+          </p>
+          <p className="text-xs text-muted-foreground">Start Date</p>
+        </div>
+      </div>
+      <div className="flex items-center gap-2">
+        <CalendarDays className="h-4 w-4 text-primary" />
+        <div>
+          <p className="font-semibold">
+            {formatDate(trip.travelDatesEnd, trip.dateInputType)}
+          </p>
+          <p className="text-xs text-muted-foreground">End Date</p>
+        </div>
+      </div>
+      <div className="flex items-center gap-2">
+        <Users className="h-4 w-4 text-primary" />
+        <div>
+          <p className="font-semibold">
+            {trip.adults} Adult{trip.adults !== 1 ? "s" : ""}
+            {trip.children ? `, ${trip.children} Child` : ""}
+          </p>
+          <p className="text-xs text-muted-foreground">Travelers</p>
+        </div>
+      </div>
+      <div className="flex items-center gap-2">
+        <DollarSign className="h-4 w-4 text-primary" />
+        <div>
+          <p className="font-semibold">
+            {formatCurrency(trip.budget, trip.budgetCurrency)}
+          </p>
+          <p className="text-xs text-muted-foreground">Budget</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function TripDetailsPage() {
   const params = useParams<{ id: string }>();
   const tripId = params.id;
@@ -216,6 +268,32 @@ export default function TripDetailsPage() {
   const [error, setError] = useState<string | null>(null);
   const [polling, setPolling] = useState(false);
   const [retryLoading, setRetryLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("itinerary");
+
+  const tabs = [
+    "itinerary",
+    "guide",
+    "hotels",
+    "flights",
+    "dining",
+    "budget",
+  ];
+
+  const handlers = useSwipeable({
+    onSwipedLeft: () => {
+      const currentIndex = tabs.indexOf(activeTab);
+      if (currentIndex < tabs.length - 1) {
+        setActiveTab(tabs[currentIndex + 1]);
+      }
+    },
+    onSwipedRight: () => {
+      const currentIndex = tabs.indexOf(activeTab);
+      if (currentIndex > 0) {
+        setActiveTab(tabs[currentIndex - 1]);
+      }
+    },
+    trackMouse: true,
+  });
 
   // Function to fetch trip details
   const fetchTripDetails = useCallback(async () => {
@@ -442,12 +520,12 @@ export default function TripDetailsPage() {
   }
 
   return (
-    <div className="container mx-auto p-4 md:p-8 space-y-8">
+    <div className="container mx-auto p-4 sm:p-6 md:p-8 space-y-8">
       <header className="flex flex-col space-y-2">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div>
             {trip.destination && (
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight flex items-center">
+              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight flex items-center">
                 <MapPin className="h-6 w-6 mr-2 text-primary" />
                 {trip.destination}
               </h1>
@@ -470,16 +548,23 @@ export default function TripDetailsPage() {
 
       <Separator />
 
-      {/* Trip Input Details Section */}
-      <section className="bg-muted/30 rounded-lg p-6 border border-border">
-        <h2 className="text-2xl font-semibold mb-4 flex items-center">
-          <Globe className="mr-3 h-6 w-6 text-primary" /> Trip Details
-        </h2>
+      {/* Trip Info Summary */}
+      <TripInfo trip={trip} />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Destination and Location */}
-          <Card>
-            <CardHeader className="pb-2">
+      {/* Trip Input Details Section */}
+      <Accordion type="single" collapsible className="w-full border rounded-lg">
+        <AccordionItem value="trip-details" className="border-b-0">
+          <AccordionTrigger className="text-lg font-semibold flex items-center p-4 hover:no-underline">
+            <div className="flex items-center">
+              <Globe className="mr-3 h-5 w-5 text-primary" />
+              <span>View All Details</span>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4 border-t">
+              {/* Destination and Location */}
+              <Card>
+                <CardHeader className="pb-2">
               <CardTitle className="text-lg flex items-center">
                 <MapPin className="h-4 w-4 mr-2 text-primary" />
                 Destination
@@ -692,7 +777,7 @@ export default function TripDetailsPage() {
               Additional Information
             </h3>
             <Card>
-              <CardContent className="pt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <CardContent className="pt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {trip.interests && (
                   <div>
                     <h4 className="font-medium mb-1">Specific Interests:</h4>
@@ -731,7 +816,9 @@ export default function TripDetailsPage() {
             </Card>
           </div>
         )}
-      </section>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
 
       {/* Show loading message or itinerary based on status */}
       {(trip.status === "pending" ||
@@ -813,33 +900,52 @@ export default function TripDetailsPage() {
 
       {/* Show tabbed content when completed */}
       {trip.status === "completed" && (
-        <Tabs defaultValue="itinerary" className="w-full">
-          <TabsList className="mb-4 flex w-full justify-start overflow-auto">
-            <TabsTrigger value="itinerary" className="flex items-center">
-              <CalendarDays className="h-4 w-4 mr-2" /> Itinerary
+        <div {...handlers}>
+          <Tabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            className="w-full"
+          >
+            <TabsList className="flex w-full justify-start mb-4 gap-2 overflow-x-auto sm:overflow-x-hidden">
+              <TabsTrigger value="itinerary" className="flex items-center">
+                <CalendarDays className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Itinerary</span>
             </TabsTrigger>
             <TabsTrigger value="guide" className="flex items-center">
-              <Lightbulb className="h-4 w-4 mr-2" /> Destination Guide
+              <Lightbulb className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Destination Guide</span>
             </TabsTrigger>
             <TabsTrigger value="hotels" className="flex items-center">
-              <Home className="h-4 w-4 mr-2" /> Hotels
+              <Home className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Hotels</span>
             </TabsTrigger>
             <TabsTrigger value="flights" className="flex items-center">
-              <Plane className="h-4 w-4 mr-2" /> Flights
+              <Plane className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Flights</span>
             </TabsTrigger>
             <TabsTrigger value="dining" className="flex items-center">
-              <Utensils className="h-4 w-4 mr-2" /> Dining
+              <Utensils className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Dining</span>
             </TabsTrigger>
             <TabsTrigger value="budget" className="flex items-center">
-              <Receipt className="h-4 w-4 mr-2" /> Budget
+              <Receipt className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Budget</span>
             </TabsTrigger>
           </TabsList>
 
-          {/* Itinerary Tab Content */}
-          <TabsContent value="itinerary" className="space-y-8">
-            {trip.itinerary && (
-              <div className="space-y-12">
-                {/* Day-by-Day Plan Section */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.2 }}
+            >
+              {/* Itinerary Tab Content */}
+              <TabsContent value="itinerary" className="space-y-8">
+                {trip.itinerary && (
+                  <div className="space-y-12">
+                    {/* Day-by-Day Plan Section */}
                 <section>
                   <h2 className="text-2xl font-semibold mb-6 flex items-center">
                     <CalendarDays className="mr-3 h-6 w-6 text-primary" /> Daily
@@ -874,7 +980,7 @@ export default function TripDetailsPage() {
                             )}
                           </div>
                         </CardHeader>
-                        <CardContent className="pt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <CardContent className="pt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                           <div className="bg-muted/30 p-4 rounded-lg border border-border">
                             <div className="flex items-center mb-3">
                               <Sun className="h-5 w-5 mr-2 text-yellow-500" />
@@ -927,7 +1033,7 @@ export default function TripDetailsPage() {
                         <Landmark className="mr-3 h-6 w-6 text-primary" />{" "}
                         Attractions & Activities
                       </h2>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {trip.itinerary.attractions.map((attraction, index) => (
                           <Card
                             key={index}
@@ -1024,14 +1130,14 @@ export default function TripDetailsPage() {
             trip.itinerary.hotels &&
             trip.itinerary.hotels.length > 0 ? (
               <section>
-                <h2 className="text-2xl font-semibold mb-6 flex items-center">
-                  <Home className="mr-3 h-6 w-6 text-primary" /> Recommended
-                  Accommodations
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {trip.itinerary.hotels.map((hotel, index) => (
-                    <Card
-                      key={index}
+                  <h2 className="text-2xl font-semibold mb-6 flex items-center">
+                    <Home className="mr-3 h-6 w-6 text-primary" /> Recommended
+                    Accommodations
+                  </h2>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    {trip.itinerary.hotels.map((hotel, index) => (
+                      <Card
+                        key={index}
                       className="overflow-hidden border-l-4 border-l-primary"
                     >
                       <CardHeader className="bg-muted/30">
@@ -1196,8 +1302,8 @@ export default function TripDetailsPage() {
                                     </div>
                                   </div>
                                 </div>
-                                
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+
+                                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
                                   <div className="text-center p-3 bg-muted/30 rounded-lg border border-border/30">
                                     <Clock className="h-4 w-4 mx-auto mb-2 text-muted-foreground" />
                                     <div className="text-xs text-muted-foreground mb-1">Duration</div>
@@ -1224,7 +1330,7 @@ export default function TripDetailsPage() {
                                     </div>
                                   )}
                                 </div>
-                                
+
                                 {flight.url &&
                                   flight.url !== "N/A" &&
                                   flight.url !== "TBD" && (
@@ -1303,7 +1409,7 @@ export default function TripDetailsPage() {
                         <Utensils className="mr-3 h-6 w-6 text-primary" />{" "}
                         Selected Restaurants
                       </h2>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {trip.itinerary.restaurants.map((restaurant, index) => (
                           <Card
                             key={index}
@@ -1398,8 +1504,11 @@ export default function TripDetailsPage() {
               </div>
             )}
           </TabsContent>
-        </Tabs>
+        </motion.div>
+      </AnimatePresence>
+    </Tabs>
+        </div >
       )}
-    </div>
+    </div >
   );
 }
