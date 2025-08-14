@@ -1,47 +1,41 @@
+# Production Dockerfile for Backend
+
+# ---- Builder Stage ----
 FROM python:3.12-slim-bookworm AS builder
 
-# Install uv
+# Set working directory
+WORKDIR /app
+
+# Install uv - a fast Python package installer
 RUN pip install --no-cache-dir uv
 
-# Copy dependency files
-WORKDIR /app
+# Copy dependency definition files
 COPY pyproject.toml uv.lock ./
 
-# Install dependencies into the system Python
+# Install dependencies into a virtual environment
 RUN uv pip install --system -e .
 
-# Final image - ultra slim
+# ---- Final Stage ----
 FROM python:3.12-slim-bookworm
 
-# Install runtime dependencies, Node.js, PNPM, PostgreSQL client libraries, and FFmpeg
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends ca-certificates curl \
-    libpq-dev postgresql-client ffmpeg && \
-    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y --no-install-recommends nodejs && \
-    npm install -g pnpm && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    npm cache clean --force && \
-    pip install --no-cache-dir psycopg2-binary gunicorn
+# Set working directory
+WORKDIR /app
 
-# Copy Python packages from the builder stage
+# Install runtime dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends libpq-dev postgresql-client && \
+    pip install --no-cache-dir gunicorn uvicorn && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy installed packages from builder stage
 COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
 
-# Copy application code (only what's needed)
-WORKDIR /app
-COPY app/ app/
-COPY agents/ agents/
-COPY config/ config/
-COPY models/ models/
-COPY routers/ routers/
-COPY services/ services/
-COPY api.py server.py ./
+# Copy application source code
+COPY . .
 
-# Create log directory with appropriate permissions
-RUN mkdir -p logs && chmod 777 logs
+# Expose the port the app runs on
+EXPOSE 8000
 
-EXPOSE 8001
-
-# Use gunicorn with uvicorn workers
-CMD ["gunicorn", "server:app", "--workers", "1", "--worker-class", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8001", "--timeout", "0", "--keep-alive", "5"]
+# Command to run the application
+CMD ["gunicorn", "main:app", "--workers", "2", "--worker-class", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8000"]
