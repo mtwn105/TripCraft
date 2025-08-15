@@ -21,9 +21,9 @@ COPY . .
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
-# ENV NEXT_TELEMETRY_DISABLED=1
+ENV NEXT_TELEMETRY_DISABLED=1
 
-ENV NEXT_PUBLIC_BASE_URL=https://decipherit.xyz
+ENV NEXT_PUBLIC_BASE_URL=https://tripcraft.amitwani.dev
 
 # Generate Prisma Client
 RUN corepack enable pnpm && pnpm prisma generate
