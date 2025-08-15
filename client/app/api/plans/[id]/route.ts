@@ -4,11 +4,12 @@ import { auth } from '@/lib/auth';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const session = await auth.api.getSession({ headers: request.headers });
-    
+
     if (!session) {
       return NextResponse.json(
         {
@@ -19,10 +20,8 @@ export async function GET(
       );
     }
 
-    const { id } = await params;
-
     const tripPlan = await prisma.tripPlan.findUnique({
-      where: { 
+      where: {
         id,
         userId: session.user.id
       },
@@ -63,11 +62,12 @@ export async function GET(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
     const session = await auth.api.getSession({ headers: request.headers });
-    
+
     if (!session) {
       return NextResponse.json(
         {
@@ -78,11 +78,9 @@ export async function DELETE(
       );
     }
 
-    const { id } = params;
-
     // First check if the plan exists and belongs to the user
     const tripPlan = await prisma.tripPlan.findUnique({
-      where: { 
+      where: {
         id,
         userId: session.user.id
       },
@@ -109,7 +107,7 @@ export async function DELETE(
 
     // Delete the trip plan
     await prisma.tripPlan.delete({
-      where: { 
+      where: {
         id,
         userId: session.user.id
       },

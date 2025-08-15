@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 "use client";
 
 import { useState } from "react";
@@ -15,6 +16,21 @@ import {
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
+
+export const metadata: Metadata = {
+  title: "Sign In / Sign Up | TripCraft AI",
+  description:
+    "Access your TripCraft AI account or create a new one to start planning your travels with the power of AI.",
+  openGraph: {
+    title: "Sign In / Sign Up | TripCraft AI",
+    description: "Join TripCraft AI and start creating personalized travel plans.",
+    url: "https://tripcraft.amitwani.dev/auth",
+  },
+  twitter: {
+    title: "Sign In / Sign Up | TripCraft AI",
+    description: "Join TripCraft AI and start creating personalized travel plans.",
+  },
+};
 
 export default function AuthPage() {
   const [isLoading, setIsLoading] = useState(false);

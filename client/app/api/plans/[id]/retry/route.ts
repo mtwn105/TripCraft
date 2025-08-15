@@ -4,9 +4,9 @@ import { auth } from '@/lib/auth';
 
 export async function POST(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  const { params } = context;
+  const { id } = await params;
   try {
     const session = await auth.api.getSession({ headers: request.headers });
 
@@ -19,8 +19,6 @@ export async function POST(
         { status: 401 }
       );
     }
-
-    const { id } = params;
 
     // First check if the plan exists and belongs to the user
     const tripPlan = await prisma.tripPlan.findUnique({
@@ -136,7 +134,7 @@ export async function POST(
     // Ensure we update the status to failed if there's an error
     try {
       await prisma.tripPlanStatus.update({
-        where: { tripPlanId: params.id },
+        where: { tripPlanId: id },
         data: {
           status: 'failed',
           currentStep: 'Error occurred while retrying',

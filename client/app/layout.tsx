@@ -12,8 +12,37 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://tripcraft.amitwani.dev"),
   title: "TripCraft AI",
   description: "Your Journey, Perfectly Crafted with Intelligence",
+  keywords: [
+    "TripCraft AI",
+    "AI Trip Planner",
+    "Travel Planning",
+    "Personalized Itinerary",
+    "AI Travel Assistant",
+  ],
+  openGraph: {
+    title: "TripCraft AI",
+    description: "Your Journey, Perfectly Crafted with Intelligence",
+    url: "https://tripcraft.amitwani.dev",
+    siteName: "TripCraft AI",
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: "TripCraft AI",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "TripCraft AI",
+    description: "Your Journey, Perfectly Crafted with Intelligence",
+    images: ["/og.png"],
+  },
 };
 
 export default function RootLayout({

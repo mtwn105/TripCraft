@@ -1,13 +1,13 @@
 declare global {
   interface Window {
     umami: {
-      track: (eventName: string, eventData?: Record<string, any>) => void;
+      track: (eventName: string, eventData?: Record<string, unknown>) => void;
     };
   }
 }
 
 export const umami = {
-  track: (eventName: string, eventData?: Record<string, any>) => {
+  track: (eventName: string, eventData?: Record<string, unknown>) => {
     if (window.umami) {
       window.umami.track(eventName, eventData);
     }

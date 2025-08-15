@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import {
   MapPin,
   Zap,
@@ -15,7 +16,23 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Link from "next/link";
+
+export const metadata: Metadata = {
+  title: "TripCraft AI | Your AI-Powered Travel Planner",
+  description:
+    "Create personalized travel itineraries in minutes with TripCraft AI. Our intelligent platform handles flights, hotels, activities, and budget planning for your perfect trip.",
+  openGraph: {
+    title: "TripCraft AI | Your AI-Powered Travel Planner",
+    description:
+      "Stop planning, start traveling. Let TripCraft AI build your dream vacation.",
+    url: "https://tripcraft.amitwani.dev",
+  },
+  twitter: {
+    title: "TripCraft AI | Your AI-Powered Travel Planner",
+    description:
+      "Stop planning, start traveling. Let TripCraft AI build your dream vacation.",
+  },
+};
 
 export default function Home() {
   return (
