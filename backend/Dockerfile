@@ -24,7 +24,7 @@ WORKDIR /app
 # Install runtime dependencies
 RUN apt-get update && \
     apt-get install -y --no-install-recommends libpq-dev postgresql-client && \
-    pip install --no-cache-dir gunicorn uvicorn && \
+    pip install --no-cache-dir gunicorn uvicorn psycopg2-binary && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
