@@ -59,7 +59,7 @@ export default function RootLayout({
         <Toaster />
         <Script
           defer
-          src="https://mtwnanalytics.xyz/script.js"
+          src="https://stat.scube.site/script.js"
           data-website-id="877ed4a3-5eb1-4243-b5b9-96b0a41b8056"
         />
       </body>
